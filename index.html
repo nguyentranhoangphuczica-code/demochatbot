@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coze Chatbot - Demo</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      background: linear-gradient(135deg, #f0f7ff 0%, #f7f0ff 100%);
+      height: 100vh;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+    }
+    h1 { color: #222; margin: 0; }
+    p { color: #444; margin: 0; }
+    .chat-btn {
+      background-color: #2563eb;
+      color: #fff;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 26px;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 6px 18px rgba(37,99,235,0.18);
+    }
+    .chat-btn:hover { transform: translateY(-2px); }
+    .note {
+      font-size: 13px;
+      color: #6b7280;
+      max-width: 720px;
+      text-align: center;
+      padding: 0 16px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Coze Chatbot (Demo)</h1>
+  <p>Nhấn nút để khởi tạo khung chat Coze.</p>
+
+  <button id="openChat" class="chat-btn">💬 Mở Chatbot</button>
+
+  <p class="note">
+    ⚠️ Token đã được dán trực tiếp vào file cho mục đích demo. <strong>Không</strong> commit file này lên repo công khai.
+  </p>
+
+  <!-- Nhúng SDK Coze -->
+  <script src="https://sf-cdn.coze.com/obj/unpkg-va/flow-platform/chat-app-sdk/1.2.0-beta.6/libs/oversea/index.js"></script>
+
+  <script>
+    // ======= THÔNG SỐ (Bạn có thể chỉnh) ========
+    const BOT_ID = '7563968931070033928'; // giữ nguyên nếu đúng
+    // === TOKEN (Đã dán theo yêu cầu) ===
+    const PAT_TOKEN = 'pat_tPyOE01a2AXzr0ERPKyg82act0TgFFyyrtBGO4Tr1L8Ap9qztt73fslHTu3l7aKN';
+
+    // Khi nhấn nút sẽ khởi tạo chatbot
+    document.getElementById("openChat").addEventListener("click", function () {
+      // Tránh khởi tạo nhiều lần: nếu đã có instance, không làm lại
+      if (window.__cozeChatInit) {
+        return;
+      }
+      window.__cozeChatInit = true;
+
+      new CozeWebSDK.WebChatClient({
+        config: {
+          bot_id: BOT_ID
+        },
+        componentProps: {
+          title: 'VT Bot',
+          // Bạn có thể thêm các componentProps khác nếu SDK hỗ trợ
+        },
+        auth: {
+          type: 'token',
+          token: PAT_TOKEN,
+          onRefreshToken: function () {
+            // Nếu có logic refresh token ở server, gọi server ở đây.
+            // Hiện tại trả về token tĩnh (demo).
+            return PAT_TOKEN;
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>
